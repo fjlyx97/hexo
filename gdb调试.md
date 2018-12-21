@@ -66,3 +66,15 @@ p 变量名
 
 ### 删除断点
 - 使用delete breakpoint 1 //需先使用info进行查看
+
+### 检查汇编
+- disas 查看汇编代码
+
+### 查看寄存器内容
+- info registers 查看寄存器的值，可以用print $name 打印寄存器内容
+
+### 每步执行
+- stepi
+
+### 检查寄存器或某个地址
+- x $rsp
