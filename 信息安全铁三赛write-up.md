@@ -5,7 +5,7 @@ tags:
 - 信息安全
 - write_up
 - 渗透
-categories: 信息安全
+categories: web安全笔记
 ---
 
 >- 信息安全铁三赛write_up

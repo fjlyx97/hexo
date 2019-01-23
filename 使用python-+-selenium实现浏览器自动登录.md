@@ -5,7 +5,7 @@ tags:
 - python
 - 编程
 - 学习
-categories: "python记录"
+categories: "python"
 ---
 > - 使用python + selenium实现浏览器自动登录
 > - python版本为3.6.2
