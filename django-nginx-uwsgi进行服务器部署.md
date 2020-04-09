@@ -156,7 +156,7 @@ pip install uwsgi
 - 在网站根目录下执行
 ```
 uwsgi --http :8001 --plugin python --module Blog.wsgi
-# 其中Blog.wsgi需要自行替换成自己的网站名字，比如自己的网站APP为Test，则修改为Test.wsgi
+# 其中Blog.wsgi需要自行替换成自己的网站名字（使用startproject创建的网站名），比如自己的网站为Test，则修改为Test.wsgi
 ```
 - 通过访问IP地址加端口号进行测试，例如118.25.3.239:8001（例子虚拟，自行替换IP）
 - 如果访问正常我们应该看到的是不带CSS样式的界面
@@ -232,3 +232,16 @@ sudo /etc/init.d/nginx restart
 - 视频讲解非常透彻，如果一步一步跟着执行出错可能性极低
 - [【教程】Nginx + uWsgi 部署 Django + Mezzanine 生产服务器(「自由小径」自由软件教程) - 1/2](https://www.bilibili.com/video/av10247256?t=1838)
 - [【教程】Nginx + uWsgi 部署 Django + Mezzanine 生产服务器(「自由小径」自由软件教程) - 2/2](https://www.bilibili.com/video/av10244432?t=996)
+
+# 2019.5.17后续更新
+1. 近期在部署时发现，如果在自己的程序当中，使用了python的多线程，需要在uwsgi.ini文件当中加入enable-threads=True参数
+2. 在部署的时候，使用uwsgi --ini读取配置的时候，出现了无法访问的情况，并且报出如下错误
+> - invalid request block size: 21573 (max 4096)...skip
+
+因此我们在测试时，需要修改配置文件中的socket为http，正式部署到nginx时再修改回socket，如下
+```
+[uwsgi]
+...省略
+socket = :8001 => http = :8001
+...省略
+```
