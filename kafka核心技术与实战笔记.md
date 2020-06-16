@@ -51,8 +51,8 @@ Kafka大量使用磁盘，但是基于**顺序读写**，因此SSD并没有太�
 ## Zookeeper
 - zookeeper.connect，设置zookeeper集群，可以通过proxy来达到只设置一个的目的。
 
-
 ***
+
 # Apache kafka 实战
 以下为阅读Apache kafka 实战的笔记
 
@@ -68,16 +68,32 @@ Kafka把消息顺序写入页缓存，那么同样，读缓存也会从OS中页�
 
 - 用户对partition唯一能做的，就是在消息队列尾部追加写入消息。
 
+# Partition
+分区。topic的消息被分为多个分区，对用到各个服务器。单个分区中消息是有序的，但是多个分区，消息不一定是有序的。一般情况下，一个Topic的分区数量是Broker数量的**整数倍**。这样可以将分区均匀分布到各个Broker上。
+
+- 保存位置为：log.dirs的路径
+- 有一个特殊的Partition：consumer_offset
+
+# Segment
+将分区分割为若干个段，每个segment文件最大大小相等。因为如果Partition不分区，存储的内容多了之后，不好管理，容易出问题
+
+# Consumer Group
+在同一个消费者组内，他们共享同一个公共ID，即GroutId，他们平均消费的对象针对的**不是消息**，是**分区**。不允许同一个组里两个消费者，消费同一个分区。
+
 # Kafka message
 要定位到一条消息，我们必须要三个数据：topic,partition,offset，只要有了这三个数据，就可以定位到任意一条数据，因此一条消息本质上可以看成是一条**三元组**
 
-# leader和follower
-要保证数据不丢失，就需要备份数据（replica），在kafka中分为leader和follower。这种做法和传统mysql主备的做法不同的是，只有leader对外服务，follower只能从leader获取数据，一旦leader挂了，follower才会顶上。
+# leader和follower(针对Replica)
+要保证数据不丢失，就需要备份数据（replica），在kafka中分为leader和follower。这种做法和传统mysql主从的做法不同的是，只有leader对外服务，follower只能从leader获取数据，一旦leader挂了，follower才会顶上（主备）。
 
 - kafka保证replica不会在同一个broker上（不然机器挂了和没备份一样）
 
 # 分区机制
 对于有Key的消息而言，Java版本producer自带的partitioner会根据**murmur2**算法，计算hash，接着对总分区取模，确定要发送到的目标分区号。但是一般来说，允许自定义处理机制，这样就可以满足如：相同key存储到最后一个分区，否则随机存储到除最后一个分区以外的地方。
+
+# ISR(In-sync replicas)
+副本同步列表，最初的时候副本全都是AR(Assigned Replicas)，如果断线了会变成OSR(outof-sync replicas)，AR=ISR+OSR。
+- ISR列表由
 
 # 创建一个消费者
 ## bootstrap.servers
@@ -85,3 +101,18 @@ Kafka把消息顺序写入页缓存，那么同样，读缓存也会从OS中页�
 
 ## groutid
 指定消费者组的ID，是一个字符串
+
+# Reblance
+## 触发条件
+1. 组成员发生变更，如：新消费者入组，已有消费者离组（或崩溃）
+2. topic数量发生变更
+3. topic分区数发生变更
+
+### Range
+基于范围的思想，将单个Topic分区顺序排列，将分区按照固定大小的**分区段**，一次分配给每个consumer
+
+### Round-robin
+topic分区全部摆开，轮询式分给每个consumer
+
+### Sticky
+最新发布的思想，采用了**有粘性**策略，
