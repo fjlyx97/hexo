@@ -116,3 +116,21 @@ topic分区全部摆开，轮询式分给每个consumer
 
 ### Sticky
 最新发布的思想，采用了**有粘性**策略，
+
+# Broker Controller
+Kafka集群中有多个broker，有一个会被选举为Controller，，负责控制集群中的分区和副本（集群中的老大）
+- topic的分区变化时，由Controller负责管理Partition与消费者的分配关系，即Rebalance
+
+# 脑裂
+一个集群，旧master假死，新master被选举出来，造成两个master的情况。解决方法，新master上任后，延时开始工作，直到旧master变为replicator
+
+# HW和LEO（重点内容）
+## HW
+- HW,HighWaterMark高水位
+
+HW代表目前可以消费到的最高位置，通常在同步完一个LEO之后，才会更新HW
+
+## LEO
+- Log end offset
+
+LEO是各自分区的消息offset，但是各个分区没有完全同步LEO之前，是无法消费的。
