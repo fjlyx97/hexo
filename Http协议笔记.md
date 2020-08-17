@@ -130,5 +130,3 @@ Domain和Path可以设定Cookie所属的域名和路径。浏览器在发送Cook
 
 # Cache属性
 头部字段：Cache-Control，里面可以设置max-age=30，意味着缓存30秒，但是这个字段不仅仅只存在于response，request也可以请求缓存。如果点击浏览器的前进或者后退按钮，是可以触发的。
-
-# Http代理
