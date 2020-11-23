@@ -1,5 +1,5 @@
 ---
-title: MySql实战45讲笔记
+title: Mysql调优笔记
 date: 2020-10-06 15:36:39
 tags:
 - linux
@@ -9,7 +9,7 @@ tags:
 categories : "数据库"
 ---
 
-> - 根据极课时间课程MySql实战45讲所作的笔记
+> - Mysql调优学习笔记
 > - 记录数据库的相关知识
 
 <!-- more-->
