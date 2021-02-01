@@ -1,2 +1,0 @@
-# hexo
-Store article
