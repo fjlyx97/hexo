@@ -416,3 +416,66 @@ public class HelloController {
     }
 }
 ```
+
+# Spring boot
+## 自定义配置文件
+可以在yml或者property里面定义属性，通过：
+```
+@Value(${完整属性名来导入})
+```
+
+配置文件中也可以通过以下方案互相引用：
+```
+age=10
+height=${age}
+```
+
+配置文件可以使用random作为随机值
+
+### 多环境配置
+文件名需要满足application-{profile}.properties，在主配置文件application.properties进行加载。
+```
+spring.profiles.active=dev
+```
+
+## RESTfuf API
+- @Controller 修饰class，用来处理http请求
+- @RestController 默认返回json格式
+- #RequestMapping 配置Url映射
+```
+@RequestMapping(value="/hello",method=RequestMethod.GET)
+```
+
+# Mybatis
+## settings
+```
+https://mybatis.org/mybatis-3/zh/configuration.html
+```
+可以查看链接获取所有设置
+
+## XML mapper 属性
+### insert
+- id：唯一标识符，和代码的接口对应
+- parameterType：限定参数类型
+- flushCache:标示当前sql语句的结果是否接入二级缓存
+- statementType（相对重要）：用来选择执行sql语句的方式，可以用statement（基本jdbc操作，用来表示sql语句，不可以防止sql注入）,prepared(预编译，防止sql注入),callable(调用存储过程)
+- useGeneratedKey:是否使用自增主键
+```
+useGeneratedKeys=”true” keyProperty=”id” 
+```
+
+### select
+- 当返回结果是一个集合的时候，直接使用resultType
+- 关联查询时，需要使用resultMap
+- #{}使用预编译（不会出现sql注入，推荐使用）、${}使用正常的拼接
+- 如果查询单个参数的时候，#{para}，里面的参数随便写
+- 可以通过resultMap属性，进行字段映射，比如数据库为dname映射为代码中的name
+
+### 缓存
+- 一级缓存，session级别缓存
+- 二级缓存，全局缓存，所有session共享
+- 第三方缓存
+
+某些情况下，一级缓存可能会失效。例如开启了多个会话、传递对象时属性变更了、当在任意一个会话中改变了数据、手动clear了缓存
+
+二级缓存表示全局缓存，必须等session关闭了才会生效
